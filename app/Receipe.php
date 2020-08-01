@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Receipe extends Model
 {
-    protected $table = "receipe";
+    protected $fillable = array('name', 'ingredients', 'category');
+    protected $table    = "receipe";
+    // protected $guarded  = [];
 }
