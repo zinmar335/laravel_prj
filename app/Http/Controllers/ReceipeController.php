@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Receipe;
+use Auth;
 use Illuminate\Http\Request;
 
 class ReceipeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,7 @@ class ReceipeController extends Controller
      */
     public function index()
     {
-        $data = Receipe::all();
+        $data = Receipe::where('user_id', auth()->id())->get();
         return view('home', compact('data'));
     }
 
@@ -25,7 +37,8 @@ class ReceipeController extends Controller
      */
     public function create()
     {
-        return view('create');
+        $category = Category::all();
+        return view('create', compact('category'));
     }
 
     /**
@@ -42,7 +55,7 @@ class ReceipeController extends Controller
             'category'    => 'required',
         ]);
 
-        Receipe::create($validatedData);
+        Receipe::create($validatedData + ['user_id' => auth()->id()]);
 
         return redirect("receipe");
     }
@@ -55,6 +68,10 @@ class ReceipeController extends Controller
      */
     public function show(Receipe $receipe)
     {
+        // if($receipe->user_id != auth()->id()) {
+        //     abort(404);
+        // }
+        // $this->authorize('view', $receipe);
         return view("show", compact('receipe'));
     }
 
@@ -66,7 +83,9 @@ class ReceipeController extends Controller
      */
     public function edit(Receipe $receipe)
     {
-        return view("edit", compact('receipe'));
+        // $this->authorize('view', $receipe);
+        $category = Category::all();
+        return view("edit", compact('receipe', 'category'));
     }
 
     /**
@@ -78,8 +97,13 @@ class ReceipeController extends Controller
      */
     public function update(Receipe $receipe)
     {
-        
+        $validatedData = request()->validate([
+            'name'        => 'required',
+            'ingredients' => 'required',
+            'category'    => 'required',
+        ]);
 
+        // $this->authorize('view', $receipe);
         $receipe->update($validatedData);
 
         return view("show", compact('receipe'));
@@ -93,6 +117,7 @@ class ReceipeController extends Controller
      */
     public function destroy(Receipe $receipe)
     {
+        // $this->authorize('view', $receipe);
         $receipe->delete();
         return redirect('/receipe');
     }
