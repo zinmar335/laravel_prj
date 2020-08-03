@@ -11,4 +11,9 @@
 |
  */
 
-Route::resource('receipe', 'ReceipeController');
+Route::group(['middleware' => ['auth', 'can:view']], function () {
+	Route::resource('receipe', 'ReceipeController');
+});
+
+Route::get('home', 'HomeController@index');
+Auth::routes();
