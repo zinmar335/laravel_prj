@@ -1,5 +1,6 @@
 <?php
 
+use App\Receipe;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,8 +12,24 @@
 |
  */
 
+// app()->bind('App\test', function() {
+// 	return new \App\test("nani sore!");
+// });
+
+// app()->bind('test', function() {
+// 	return new \App\test("nani sore!");
+// });
+
+Route::get('/', function () {
+    dd(app('test'));
+});
+
+// Route::get('/', function () {
+//     dd(app('test'), app('test'));
+// });
+
 Route::group(['middleware' => ['auth', 'can:view']], function () {
-	Route::resource('receipe', 'ReceipeController');
+    Route::resource('receipe', 'ReceipeController');
 });
 
 Route::get('home', 'HomeController@index');

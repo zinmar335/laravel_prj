@@ -15,11 +15,14 @@
                     @endif
 
                     <h3> Home Page </h3>
-					<a href="/receipe/create" class="btn btn-success">Add Receipe</a>
-					@foreach($data as $value)
-						<a href="/receipe/{{$value->id}}"><li>{{$value->name}}</li></a>
-						<hr>
-					@endforeach
+                    @if(session("message"))
+                    <div class="alert alert-success" role="alert">{{session("message")}}</div>
+                    @endif
+                    <a href="/receipe/create" class="btn btn-success">Add Receipe</a>
+                    @foreach($data as $value)
+                        <a href="/receipe/{{$value->id}}"><li>{{$value->name}}</li></a>
+                        <hr>
+                    @endforeach
                 </div>
             </div>
         </div>

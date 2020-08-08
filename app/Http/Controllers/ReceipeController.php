@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Receipe;
+use App\test;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -56,7 +57,7 @@ class ReceipeController extends Controller
         ]);
 
         Receipe::create($validatedData + ['user_id' => auth()->id()]);
-
+        session()->flash('message', 'receipe has created successfully');
         return redirect("receipe");
     }
 
@@ -66,12 +67,13 @@ class ReceipeController extends Controller
      * @param  \App\Receipe  $receipe
      * @return \Illuminate\Http\Response
      */
-    public function show(Receipe $receipe)
+    public function show(Receipe $receipe, test $test)
     {
         // if($receipe->user_id != auth()->id()) {
         //     abort(404);
         // }
         // $this->authorize('view', $receipe);
+        dd($test);
         return view("show", compact('receipe'));
     }
 
@@ -106,7 +108,7 @@ class ReceipeController extends Controller
         // $this->authorize('view', $receipe);
         $receipe->update($validatedData);
 
-        return view("show", compact('receipe'));
+        return view("show", compact('receipe'))->with('message', 'receipe has updated successfully');
     }
 
     /**
